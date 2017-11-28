@@ -122,6 +122,14 @@ public class Individual {
     }
 
     /**
+     * Returns the Scheduleperiod instances.
+     * @return Scheduleperiod
+     */
+    public SchedulingPeriod getPeriod() {
+        return period;
+    }
+
+    /**
      * Returns true, if this individual is a feasible solution, i.e. all
      * hard constraints are satisfied.
      * @return True, if this individual is a feasible solution

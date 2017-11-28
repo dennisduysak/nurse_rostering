@@ -30,8 +30,8 @@ public class SimulatedAnnealing {
             float score = oldSolution.getFitness();
             SwappingNursesMutation swap = new SwappingNursesMutation();
             Individual newSolution = swap.mutate(oldSolution);
-            //System.out.println("\t" + i + 1 + ".Iteration - Score: " + newSolution.getScore());
-            double newScore = newSolution.getFitness();
+            double newScore = newSolution.getFitness(true);
+            System.out.println("\t" + (i + 1) + ".Iteration - Score: " + newSolution.getFitness());
             if (newScore > score) {
                 double scoreDiff = score - newScore;
                 double temperature = startingTemperature - (i * coolingRate);

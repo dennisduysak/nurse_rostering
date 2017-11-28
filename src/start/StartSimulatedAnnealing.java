@@ -1,5 +1,6 @@
 package start;
 
+import helper.ConfigurationHelper;
 import model.Individual;
 import model.sa.SimulatedAnnealing;
 import model.schedule.SchedulingPeriod;
@@ -28,7 +29,8 @@ public class StartSimulatedAnnealing extends Basis {
      */
     public static void main(String[] args) {
         // read scheduling period information
-        SchedulingPeriod period = getInstance().parseSchedulingPeriod("long01.xml");
+        SchedulingPeriod period = getInstance().parseSchedulingPeriod(ConfigurationHelper.getInstance().
+                getProperty("file"));
 
         // create and run the simulated annealing
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();

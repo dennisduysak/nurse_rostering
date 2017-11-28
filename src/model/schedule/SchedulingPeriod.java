@@ -1,6 +1,7 @@
 package model.schedule;
 
 import helper.DateTimeHelper;
+import helper.RandomHelper;
 
 import java.util.*;
 
@@ -206,6 +207,10 @@ public class SchedulingPeriod {
 
     public List<Employee> getEmployees() {
         return employees;
+    }
+
+    public Employee getRandomEmployee() {
+        return employees.get(RandomHelper.getInstance().getInt(employees.size()));
     }
 
     public void setEmployees(List<Employee> employees) {
