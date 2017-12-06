@@ -3,13 +3,8 @@ package model.sa;
 import helper.ConfigurationHelper;
 import model.Individual;
 import model.construction.RandomConstructionHeuristic;
-import model.ea.Population;
 import model.operators.SwappingNursesMutation;
-import model.schedule.DayRoster;
 import model.schedule.SchedulingPeriod;
-
-import javax.naming.InitialContext;
-import java.util.List;
 
 public class SimulatedAnnealing {
     /**
@@ -19,18 +14,19 @@ public class SimulatedAnnealing {
 
     public Individual optimize(SchedulingPeriod period) {
         initIndividual = generateInitializationPopulation(period);
+        initIndividual.getFitness(true);
 
         Individual oldSolution = Individual.copy(initIndividual);
         double startingTemperature = ConfigurationHelper.getInstance().getPropertyDouble("sa.StartTemperature", 100);
         double coolingRate = ConfigurationHelper.getInstance().getPropertyDouble("sa.CoolingRate", 0.1);
         int numberOfIterations = (int) (startingTemperature / coolingRate);
         Individual bestSolution = oldSolution;
+        SwappingNursesMutation swapMutation = new SwappingNursesMutation();
 
         for (int i = 0; i < numberOfIterations; i++) {
             float score = oldSolution.getFitness();
-            SwappingNursesMutation swap = new SwappingNursesMutation();
-            Individual newSolution = swap.mutate(oldSolution);
-            double newScore = newSolution.getFitness(true);
+            Individual newSolution = swapMutation.swapNurses(oldSolution);
+            double newScore = newSolution.getFitness();
             System.out.println("\t" + (i + 1) + ".Iteration - Score: " + newSolution.getFitness());
             if (newScore > score) {
                 double scoreDiff = score - newScore;
@@ -49,7 +45,6 @@ public class SimulatedAnnealing {
                 }
             }
         }
-
         return bestSolution;
     }
 

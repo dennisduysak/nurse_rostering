@@ -86,14 +86,14 @@ public class EvolutionaryCycle {
 //                 children = recombinationOperator.recombine(parents);
 //            }
 //
-//            // mutate individuals (if used)
+//            // swapNurses individuals (if used)
 //            if (useMutation) {
-//            	// if recombination was used, mutate the new created children
+//            	// if recombination was used, swapNurses the new created children
 //            	if (useRecombination) {
-//            		children = mutationOperator.mutate(children);
+//            		children = mutationOperator.swapNurses(children);
 //            	} else {
-//                    // if not, mutate the selected parents
-//                    children = mutationOperator.mutate(parents);
+//                    // if not, swapNurses the selected parents
+//                    children = mutationOperator.swapNurses(parents);
 //            	}
 //            }
 //

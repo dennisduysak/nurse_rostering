@@ -73,25 +73,25 @@ public class FitnessCalculator {
 
         // calculate for each employee
         for (Employee employee: period.getEmployees()) {
-            Attribute minNumConsecutiveWorkDays = employee.getContract().getMinNumAssignments(),
-                    maxNumConsecutiveWorkDays = employee.getContract().getMaxNumAssignments(),
-                    minNumConsecutiveFreeDays = employee.getContract().getMinConsecutiveFreeDays(),
-                    maxNumConsecutiveFreeDays = employee.getContract().getMaxConsecutiveFreeDays();
+            Attribute minNumConsecutiveWorkDays = employee.getContract().getMinConsecutiveWorkingDays();
+            Attribute maxNumConsecutiveWorkDays = employee.getContract().getMaxConsecutiveWorkingDays();
+            Attribute minNumConsecutiveFreeDays = employee.getContract().getMinConsecutiveFreeDays();
+            Attribute maxNumConsecutiveFreeDays = employee.getContract().getMaxConsecutiveFreeDays();
 
-            int weightMinWork = minNumConsecutiveWorkDays.getWeight(),
-                    weightMaxWork = maxNumConsecutiveWorkDays.getWeight(),
-                    weightMinFree = minNumConsecutiveFreeDays.getWeight(),
-                    weightMaxFree = maxNumConsecutiveFreeDays.getWeight();
+            int weightMinWork = minNumConsecutiveWorkDays.getWeight();
+            int weightMaxWork = maxNumConsecutiveWorkDays.getWeight();
+            int weightMinFree = minNumConsecutiveFreeDays.getWeight();
+            int weightMaxFree = maxNumConsecutiveFreeDays.getWeight();
 
-            int valueMinWork = minNumConsecutiveWorkDays.getValueInt(),
-                    valueMaxWork = maxNumConsecutiveWorkDays.getValueInt(),
-                    valueMinFree = minNumConsecutiveFreeDays.getValueInt(),
-                    valueMaxFree = maxNumConsecutiveFreeDays.getValueInt();
+            int valueMinWork = minNumConsecutiveWorkDays.getValueInt();
+            int valueMaxWork = maxNumConsecutiveWorkDays.getValueInt();
+            int valueMinFree = minNumConsecutiveFreeDays.getValueInt();
+            int valueMaxFree = maxNumConsecutiveFreeDays.getValueInt();
 
-            int numMinConsecutiveWork = individual.getNumMinConsecutiveWork(employee),
-                    numMaxConsecutiveWork = individual.getNumMaxConsecutiveWork(employee),
-                    numMinConsecutiveFree = individual.getNumMinConsecutiveFree(employee),
-                    numMaxConsecutiveFree = individual.getNumMaxConsecutiveFree(employee);
+            int numMinConsecutiveWork = individual.getNumMinConsecutiveWork(employee);
+            int numMaxConsecutiveWork = individual.getNumMaxConsecutiveWork(employee);
+            int numMinConsecutiveFree = individual.getNumMinConsecutiveFree(employee);
+            int numMaxConsecutiveFree = individual.getNumMaxConsecutiveFree(employee);
 
             // if soft-constraints are unsatisfied, add deviation
             if (numMinConsecutiveWork < valueMinWork) {
@@ -120,31 +120,31 @@ public class FitnessCalculator {
 
         // calculate for each employee
         for (Employee employee: period.getEmployees()) {
-            Attribute maxWorkingWeekendsTotal = employee.getContract().getMaxWorkingWeekendsInFourWeeks(),
-                    minNumConsecutiveWorkWeekends = employee.getContract().getMinConsecutiveWorkingWeekends(),
-                    maxNumConsecutiveWorkWeekends = employee.getContract().getMaxConsecutiveWorkingWeekends(),
-                    completeWeekends = employee.getContract().getCompleteWeekends(),
-                    identicalShiftTypes = employee.getContract().getIdenticalShiftTypesDuringWeekend(),
-                    noNightShiftsBeforeWeekends = employee.getContract().getNoNightShiftBeforeFreeWeekend();
+            Attribute maxWorkingWeekendsTotal = employee.getContract().getMaxWorkingWeekendsInFourWeeks();
+            Attribute minNumConsecutiveWorkWeekends = employee.getContract().getMinConsecutiveWorkingWeekends();
+            Attribute maxNumConsecutiveWorkWeekends = employee.getContract().getMaxConsecutiveWorkingWeekends();
+            Attribute completeWeekends = employee.getContract().getCompleteWeekends();
+            Attribute identicalShiftTypes = employee.getContract().getIdenticalShiftTypesDuringWeekend();
+            Attribute noNightShiftsBeforeWeekends = employee.getContract().getNoNightShiftBeforeFreeWeekend();
 
-            int weightMaxWorkingWeekendsTotal = maxWorkingWeekendsTotal.getWeight(),
-                    weightMinConsecutiveWork = minNumConsecutiveWorkWeekends.getWeight(),
-                    weightMaxConsecutiveWork = maxNumConsecutiveWorkWeekends.getWeight(),
-                    weightCompleteWeekends = completeWeekends.getWeight(),
-                    weightIdenticalShiftTypes = identicalShiftTypes.getWeight(),
-                    weightNoNightShiftsBeforeWeekends = noNightShiftsBeforeWeekends.getWeight();
+            int weightMaxWorkingWeekendsTotal = maxWorkingWeekendsTotal.getWeight();
+            int weightMinConsecutiveWork = minNumConsecutiveWorkWeekends.getWeight();
+            int weightMaxConsecutiveWork = maxNumConsecutiveWorkWeekends.getWeight();
+            int weightCompleteWeekends = completeWeekends.getWeight();
+            int weightIdenticalShiftTypes = identicalShiftTypes.getWeight();
+            int weightNoNightShiftsBeforeWeekends = noNightShiftsBeforeWeekends.getWeight();
 
-            int valueMaxWorkingWeekendsTotal = maxWorkingWeekendsTotal.getValueInt(),
-                    valueMinConsecutiveWork = minNumConsecutiveWorkWeekends.getValueInt(),
-                    valueMaxConsecutiveWork = maxNumConsecutiveWorkWeekends.getValueInt();
+            int valueMaxWorkingWeekendsTotal = maxWorkingWeekendsTotal.getValueInt();
+            int valueMinConsecutiveWork = minNumConsecutiveWorkWeekends.getValueInt();
+            int valueMaxConsecutiveWork = maxNumConsecutiveWorkWeekends.getValueInt();
 
-            boolean valueCompleteWeekends = completeWeekends.getValueBoolean(),
-                    valueIdenticalShiftTypes = identicalShiftTypes.getValueBoolean(),
-                    valueNoNightShiftsBeforeWeekends = noNightShiftsBeforeWeekends.getValueBoolean();
+            boolean valueCompleteWeekends = completeWeekends.getValueBoolean();
+            boolean valueIdenticalShiftTypes = identicalShiftTypes.getValueBoolean();
+            boolean valueNoNightShiftsBeforeWeekends = noNightShiftsBeforeWeekends.getValueBoolean();
 
-            int numWeekendsWorkTotal = individual.getNumTotalWeekendsWork(employee),
-                    numMinConsecutiveWeekendsWork = individual.getNumMinConsecutiveWeekendsWork(employee),
-                    numMaxConsecutiveWeekendsWork = individual.getNumMaxConsecutiveWeekendsWork(employee);
+            int numWeekendsWorkTotal = individual.getNumTotalWeekendsWork(employee);
+            int numMinConsecutiveWeekendsWork = individual.getNumMinConsecutiveWeekendsWork(employee);
+            int numMaxConsecutiveWeekendsWork = individual.getNumMaxConsecutiveWeekendsWork(employee);
 
             // if soft-constraints are unsatisfied, add deviation
             if (numWeekendsWorkTotal > valueMaxWorkingWeekendsTotal) {

@@ -29,15 +29,16 @@ public class StartSimulatedAnnealing extends Basis {
      */
     public static void main(String[] args) {
         // read scheduling period information
-        SchedulingPeriod period = getInstance().parseSchedulingPeriod(ConfigurationHelper.getInstance().
-                getProperty("file"));
+        String fileName = ConfigurationHelper.getInstance().getProperty("file");
+        SchedulingPeriod period = getInstance().parseSchedulingPeriod(fileName);
 
         // create and run the simulated annealing
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
         Individual best = simulatedAnnealing.optimize(period);
         Individual init = simulatedAnnealing.getInitIndividual();
 
-        int i = 0;
-
+        System.out.println("InitScore: " + init.getFitness());
+        System.out.println("BestScore: " + best.getFitness());
+        System.out.println("Difference: " + (init.getFitness() - best.getFitness()));
     }
 }

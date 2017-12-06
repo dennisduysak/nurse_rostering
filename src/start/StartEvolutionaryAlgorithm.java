@@ -1,5 +1,6 @@
 package start;
 
+import helper.ConfigurationHelper;
 import model.Individual;
 import model.ea.EvolutionaryCycle;
 import model.ea.Population;
@@ -32,7 +33,8 @@ public class StartEvolutionaryAlgorithm extends Basis {
      */
     public static void main(String[] args) {
         // read scheduling period information
-        SchedulingPeriod period = getInstance().parseSchedulingPeriod("long01.xml");
+        String fileName = ConfigurationHelper.getInstance().getProperty("file");
+        SchedulingPeriod period = getInstance().parseSchedulingPeriod(fileName);
 
         // create and run the evolutionary cycle
         EvolutionaryCycle evolutionaryCycle = new EvolutionaryCycle();
