@@ -6,7 +6,7 @@ import helper.ConfigurationHelper;
 import model.ea.Population;
 
 public class StochasticMatingSelection implements IMatingSelection {
-	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("NumberOfParents", 6);
+	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
 	
 	/**
      * @param population: the initial population of the generation

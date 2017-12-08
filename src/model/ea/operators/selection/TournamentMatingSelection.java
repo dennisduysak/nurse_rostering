@@ -9,7 +9,7 @@ import helper.RandomHelper;
 import model.ea.Population;
 
 public class TournamentMatingSelection implements IMatingSelection {
-	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("NumberOfParents", 6);
+	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
 	private int numberOfDirectDuels = ConfigurationHelper.getInstance().getPropertyInteger("NumberOfDirectDuels", 3);
 	
 	/**

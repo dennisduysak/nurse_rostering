@@ -8,7 +8,7 @@ import model.ea.Population;
  * and creates children with a half of each parent
  */
 @SuppressWarnings("unused")
-public class SequentialRecombination implements IRecombination {
+public class OnePointCrossover implements IRecombination {
 	@Override
 	public Population recombine(Population parents) {
 		Population children = new Population();

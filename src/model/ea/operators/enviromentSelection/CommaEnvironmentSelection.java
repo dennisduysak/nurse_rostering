@@ -10,10 +10,10 @@ import model.Individual;
 import model.ea.Population;
 
 public class CommaEnvironmentSelection implements IEnvironmentSelection {
-	 private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("IndividualsPerPopulation", 10);
+	 private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
 	 
 	 /** 
-	  *@param takes the population after Recombination and Mutation
+	  *@param population - takes the population after Recombination and Mutation
 	  *selects the number of needed best individuals from children only
 	  *requires that the number of children is at least as big as individuals needed
 	  *@return thereby the new Generation of the population is created
@@ -22,14 +22,7 @@ public class CommaEnvironmentSelection implements IEnvironmentSelection {
 	public void select(Population population) {
 		List<Individual> children = population.getPool().subList(individualsPerPopulation, population.getPool().size());
 		List <Individual> newGeneration = new ArrayList<Individual>();
-		Collections.sort(children, new Comparator<Individual>() {
-            @Override
-            public int compare(Individual individualA, Individual individualB) {
-                return individualA.getFitness() < individualB.getFitness() ? -1
-                        : individualA.getFitness() == individualB.getFitness() ? 0
-                        : 1;
-            }
-        });
+		children.sort((individualA, individualB) -> Float.compare(individualA.getFitness(), individualB.getFitness()));
 		for (int i = 0; i < individualsPerPopulation; i++) {
 			if(children.isEmpty()){break;}
 			newGeneration.add(children.get(i));

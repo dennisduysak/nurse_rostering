@@ -79,7 +79,7 @@ public class ClassLoaderHelper {
      * @return Instance that implements IRecombinationOperator
      */
     public IRecombination getRecombinationOperator() {
-        Object instance = getLoadedClass("ea.RecombinationOperator", "SimpleRecombination", "model.ea.operators.recombination.");
+        Object instance = getLoadedClass("ea.RecombinationOperator", "OnePointCrossover", "model.ea.operators.recombination.");
         if (instance == null) {
             return null;
         }
@@ -92,7 +92,7 @@ public class ClassLoaderHelper {
      * @return Instance that implements IMutationOperator
      */
     public IMutation getMutationOperator() {
-        Object instance = getLoadedClass("ea.MutationOperator", "ea.SimpleMutation", "model.ea.operators.mutation.");
+        Object instance = getLoadedClass("ea.MutationOperator", "ea.SwappingNursesMutation", "model.ea.operators.mutation.");
         if (instance == null) {
             return null;
         }

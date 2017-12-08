@@ -6,7 +6,7 @@ import model.ea.Population;
 import model.schedule.DayRoster;
 
 @SuppressWarnings("unused")
-public class RandomRecombination implements IRecombination {
+public class UniformCrossover implements IRecombination {
 	
 	/**
 	 * Recombines days of two individuals to create a whole new individual.

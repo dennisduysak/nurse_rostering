@@ -1,4 +1,4 @@
-package model.operators;
+package model.sa.operators;
 
 import helper.RandomHelper;
 import model.Individual;
@@ -14,10 +14,10 @@ public class SwappingNursesMutation {
      * For every individual of the selection swap the first nurse of shift x on a random day
      * with the first nurse of shift x on another random day.
      *
-     * @param individual: either the new created children or, in the case without recombination, swapNurses the selected parents
+     * @param individual: either the new created children or, in the case without recombination, mutate the selected parents
      * @return selection: the by mutation changed selection
      */
-    public Individual swapNurses(Individual individual) {
+    public Individual mutate(Individual individual) {
         Individual mutatedInd = null;
 
         do {

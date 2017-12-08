@@ -26,9 +26,7 @@ public class StartSimulatedAnnealing extends Basis {
     private StartSimulatedAnnealing() {
     }
 
-    /**
-     * Default main method.
-     */
+
     public static void main(String[] args) {
         // read scheduling period information
         String fileName = ConfigurationHelper.getInstance().getProperty("file");

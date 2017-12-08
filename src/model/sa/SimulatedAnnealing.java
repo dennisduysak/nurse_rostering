@@ -3,7 +3,8 @@ package model.sa;
 import helper.ConfigurationHelper;
 import model.Individual;
 import model.construction.RandomConstructionHeuristic;
-import model.operators.SwappingNursesMutation;
+import model.sa.operators.Swap;
+import model.sa.operators.SwappingNursesMutation;
 import model.schedule.SchedulingPeriod;
 
 public class SimulatedAnnealing {
@@ -13,7 +14,9 @@ public class SimulatedAnnealing {
     private Individual initIndividual = null;
 
     public Individual optimize(SchedulingPeriod period) {
-        initIndividual = generateInitializationPopulation(period);
+        //get initialsolution
+        RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
+        initIndividual = randomConstructionHeuristic.getIndividual(period);
         initIndividual.getFitness(true);
 
         Individual oldSolution = Individual.copy(initIndividual);
@@ -22,12 +25,13 @@ public class SimulatedAnnealing {
         int numberOfIterations = (int) (startingTemperature / coolingRate);
         Individual bestSolution = oldSolution;
         SwappingNursesMutation swapMutation = new SwappingNursesMutation();
+        //Swap swapMutation = new Swap();
 
         for (int i = 0; i < numberOfIterations; i++) {
             double score = oldSolution.getFitness();
-            Individual newSolution = swapMutation.swapNurses(oldSolution);
+            Individual newSolution = swapMutation.mutate(oldSolution);
             double newScore = newSolution.getFitness();
-            //System.out.println("\t" + (i + 1) + ".Iteration - Score: " + newSolution.getFitness());
+            System.out.println("\t" + (i + 1) + ".Iteration - Score: " + newSolution.getFitness());
             if (newScore > score) {
                 double scoreDiff = score - newScore;
                 double temperature = startingTemperature - (i * coolingRate);
@@ -50,15 +54,5 @@ public class SimulatedAnnealing {
 
     public Individual getInitIndividual() {
         return initIndividual;
-    }
-
-    /**
-     * Returns a generated initialization individual for a specific scheduling period.
-     * @param period SchedulingPeriod instance
-     * @return Population instance
-     */
-    private Individual generateInitializationPopulation(SchedulingPeriod period) {
-            RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
-            return randomConstructionHeuristic.getIndividual(period);
     }
 }

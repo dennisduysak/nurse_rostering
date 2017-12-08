@@ -11,7 +11,7 @@ import model.ea.Population;
 
 public class TournamentEnvironmentSelection implements IEnvironmentSelection {
     private int numberOfDirectDuels = ConfigurationHelper.getInstance().getPropertyInteger("NumberOfDirectDuels", 3);
-    private int numberOfSelections = ConfigurationHelper.getInstance().getPropertyInteger("IndividualsPerPopulation", 10);
+    private int numberOfSelections = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
 
     /**
      * @param currentPopulation: the population after mutation and recombination

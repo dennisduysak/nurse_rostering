@@ -104,7 +104,7 @@ public class Population {
      * Calculates the fitness of every individual.
      * @param forceRecalculation If true, forces recalculation
      */
-    void benchmark(boolean forceRecalculation) {
+    private void benchmark(boolean forceRecalculation) {
         overallFitness = 0;
         for (Individual individual: pool) {
             overallFitness += individual.getFitness(forceRecalculation);
@@ -114,7 +114,7 @@ public class Population {
     /**
      * Calculates the fitness of every individual.
      */
-    void benchmark() {
+    public void benchmark() {
         benchmark(true);
     }
 
@@ -123,12 +123,10 @@ public class Population {
      * @return Population this
      */
     public Population sortByFitness() {
-        Collections.sort(pool, new Comparator<Individual>() {
+        pool.sort(new Comparator<Individual>() {
             @Override
             public int compare(Individual individualA, Individual individualB) {
-                return individualA.getFitness() < individualB.getFitness() ? -1
-                        : individualA.getFitness() == individualB.getFitness() ? 0
-                        : 1;
+                return Float.compare(individualA.getFitness(), individualB.getFitness());
             }
         });
         return this;
