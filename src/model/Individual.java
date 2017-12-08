@@ -299,10 +299,18 @@ public class Individual {
      */
     private void calculateConsecutiveDays(Employee employee) {
         // calculate number of consecutive events and store in caches
-        int consecutiveWork = 0, consecutiveFree = 0,
-                lastMinConsecutiveWork = 0, lastMaxConsecutiveWork = 0,
-                lastMinConsecutiveFree = 0, lastMaxConsecutiveFree = 0;
-        boolean yesterdayWork = false, yesterdayFree = false;
+        int consecutiveWork = 0;
+        int consecutiveFree = 0;
+        int lastMinConsecutiveWork = 0;
+        int lastMaxConsecutiveWork = 0;
+        int lastMinConsecutiveFree = 0;
+        int lastMaxConsecutiveFree = 0;
+        int maxConWorkDay = employee.getContract().getMaxConsecutiveWorkingDays().getValueInt();
+        int minConWorkDay = employee.getContract().getMinConsecutiveWorkingDays().getValueInt();
+        int maxConFreeDay = employee.getContract().getMaxConsecutiveFreeDays().getValueInt();
+        int minConFreeDay = employee.getContract().getMinConsecutiveFreeDays().getValueInt();
+        boolean yesterdayWork = false;
+        boolean yesterdayFree = false;
         for (Map.Entry<DayRoster, Boolean> entry: getAssignments(employee).entrySet()) {
             if (entry.getValue()) {
                 // employee works today, check if employee also worked yesterday
@@ -311,12 +319,11 @@ public class Individual {
                 }
 
                 // employee has not free today, update last numbers of consecutive free days
-                if (consecutiveFree > lastMaxConsecutiveFree) {
-                    lastMaxConsecutiveFree = consecutiveFree;
+                if (consecutiveFree > maxConFreeDay) {
+                    lastMaxConsecutiveFree += consecutiveFree - maxConFreeDay;
                 }
-                if (lastMinConsecutiveFree == 0
-                        || consecutiveFree > 0 && consecutiveFree < lastMinConsecutiveFree) {
-                    lastMinConsecutiveFree = consecutiveFree;
+                if (yesterdayFree && consecutiveFree < minConFreeDay) {
+                    lastMinConsecutiveFree += minConFreeDay - consecutiveFree;
                 }
 
                 consecutiveFree = 0;
@@ -329,12 +336,11 @@ public class Individual {
                 }
 
                 // employee does not work today, update last numbers of consecutive assignments
-                if (consecutiveWork > lastMaxConsecutiveWork) {
-                    lastMaxConsecutiveWork = consecutiveWork;
+                if (consecutiveWork > maxConWorkDay) {
+                    lastMaxConsecutiveWork += consecutiveWork - maxConWorkDay;
                 }
-                if (lastMinConsecutiveWork == 0
-                        || consecutiveWork > 0 && consecutiveWork < lastMinConsecutiveWork) {
-                    lastMinConsecutiveWork = consecutiveWork;
+                if (yesterdayWork && consecutiveWork < minConWorkDay) {
+                    lastMinConsecutiveWork += minConWorkDay - consecutiveWork;
                 }
 
                 consecutiveWork = 0;
@@ -484,13 +490,17 @@ public class Individual {
      */
     private void calculateWeekends(Employee employee) {
         // calculate number of consecutive events and store in caches
-        int consecutiveWork = 0, totalWork = 0,
-                lastMinConsecutiveWeekendWork = 0, lastMaxConsecutiveWeekendWork = 0;
+        int consecutiveWork = 0;
+        int totalWork = 0;
+        int lastMinConsecutiveWeekendWork = 0;
+        int lastMaxConsecutiveWeekendWork = 0;
+        int maxConFreeWeekend = employee.getContract().getMaxConsecutiveWorkingWeekends().getValueInt();
+        int minConFreeWeekend = employee.getContract().getMinConsecutiveWorkingWeekends().getValueInt();
 
-        boolean lastWeekendWork = false,
-                completeWeekend = true,
-                identicalShiftTypes = true,
-                noNight = true;
+        boolean lastWeekendWork = false;
+        boolean completeWeekend = true;
+        boolean identicalShiftTypes = true;
+        boolean noNight = true;
 
         ShiftType lastShift = null;
 

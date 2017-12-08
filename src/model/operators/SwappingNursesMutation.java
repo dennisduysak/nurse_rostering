@@ -58,7 +58,6 @@ public class SwappingNursesMutation {
                 dayRoster.get(randShift).entrySet().iterator().next().setValue(nurse2);
             }
 
-
         } while (!mutatedInd.isFeasible());
 
         //update fitness

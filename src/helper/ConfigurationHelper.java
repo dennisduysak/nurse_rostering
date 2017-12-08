@@ -154,4 +154,13 @@ public class ConfigurationHelper {
     public String[] getPropertyArray(String key) {
         return getPropertyArray(key, "\\,");
     }
+
+    /**
+     * sets Property
+     * @param key
+     * @param value
+     */
+    public void setProperty(String key, String value) {
+        configuration.setProperty(key, value);
+    }
 }

@@ -13,6 +13,7 @@ public class StartSimulatedAnnealing extends Basis {
 
     /**
      * Returns the singleton instance.
+     *
      * @return Singleton instance
      */
     public static StartSimulatedAnnealing getInstance() {
@@ -22,7 +23,8 @@ public class StartSimulatedAnnealing extends Basis {
     /**
      * Private constructor to avoid bypassing singleton.
      */
-    private StartSimulatedAnnealing() {}
+    private StartSimulatedAnnealing() {
+    }
 
     /**
      * Default main method.
@@ -34,6 +36,7 @@ public class StartSimulatedAnnealing extends Basis {
 
         // create and run the simulated annealing
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+
         Individual best = simulatedAnnealing.optimize(period);
         Individual init = simulatedAnnealing.getInitIndividual();
 

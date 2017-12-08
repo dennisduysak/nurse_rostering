@@ -73,7 +73,7 @@ public class FitnessCalculator {
 
         // calculate for each employee
         for (Employee employee: period.getEmployees()) {
-            Attribute minNumConsecutiveWorkDays = employee.getContract().getMinConsecutiveWorkingDays();
+            /*Attribute minNumConsecutiveWorkDays = employee.getContract().getMinConsecutiveWorkingDays();
             Attribute maxNumConsecutiveWorkDays = employee.getContract().getMaxConsecutiveWorkingDays();
             Attribute minNumConsecutiveFreeDays = employee.getContract().getMinConsecutiveFreeDays();
             Attribute maxNumConsecutiveFreeDays = employee.getContract().getMaxConsecutiveFreeDays();
@@ -105,7 +105,11 @@ public class FitnessCalculator {
             }
             if (numMaxConsecutiveFree > valueMaxFree) {
                 deviation += (numMaxConsecutiveFree - valueMaxFree) * weightMaxFree;
-            }
+            }*/
+            deviation += individual.getNumMinConsecutiveWork(employee);
+            deviation += individual.getNumMaxConsecutiveWork(employee);
+            deviation += individual.getNumMinConsecutiveFree(employee);
+            deviation += individual.getNumMaxConsecutiveFree(employee);
         }
 
         return deviation;
@@ -148,13 +152,13 @@ public class FitnessCalculator {
 
             // if soft-constraints are unsatisfied, add deviation
             if (numWeekendsWorkTotal > valueMaxWorkingWeekendsTotal) {
-                deviation += (numWeekendsWorkTotal - valueMaxWorkingWeekendsTotal) * weightMaxWorkingWeekendsTotal;
+                deviation += (numWeekendsWorkTotal - valueMaxWorkingWeekendsTotal);// * weightMaxWorkingWeekendsTotal;
             }
             if (numMinConsecutiveWeekendsWork < valueMinConsecutiveWork) {
-                deviation += (valueMinConsecutiveWork - numMinConsecutiveWeekendsWork) * weightMinConsecutiveWork;
+                deviation += (valueMinConsecutiveWork - numMinConsecutiveWeekendsWork);// * weightMinConsecutiveWork;
             }
             if (numMaxConsecutiveWeekendsWork > valueMaxConsecutiveWork) {
-                deviation += (numMaxConsecutiveWeekendsWork - valueMaxConsecutiveWork) * weightMaxConsecutiveWork;
+                deviation += (numMaxConsecutiveWeekendsWork - valueMaxConsecutiveWork);// * weightMaxConsecutiveWork;
             }
             if (valueCompleteWeekends != individual.isCompleteWeekends(employee)) {
                 deviation += weightCompleteWeekends;

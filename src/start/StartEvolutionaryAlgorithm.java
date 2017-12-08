@@ -44,6 +44,10 @@ public class StartEvolutionaryAlgorithm extends Basis {
         Individual bestInitialized = evolutionaryCycle.getInitPopulation().getBestIndividual();
         Individual best = evolutionizedPopulation.getBestIndividual();
 
+        System.out.println("InitScore: " + bestInitialized.getFitness());
+        System.out.println("BestScore: " + best.getFitness());
+        System.out.println("Difference: " + (bestInitialized.getFitness() - best.getFitness()));
+
  /*       TuiHelper.getInstance().showEAResult(best, bestInitialized);
         System.out.println(StartEvolutionaryAlgorithm.getInstance().writeSolutionFile(best));*/
     }
