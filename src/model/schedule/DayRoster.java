@@ -1,6 +1,7 @@
 package model.schedule;
 
 import helper.DateTimeHelper;
+import model.Individual;
 
 import java.util.*;
 
@@ -163,5 +164,27 @@ public class DayRoster {
         }
 
         return out.toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof DayRoster)) {
+            return false;
+        }
+
+        DayRoster that = (DayRoster) other;
+
+        // Custom equality check here.
+        return this.roster.equals(that.roster) && this.date.equals(that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+
+        hashCode = hashCode * 37 + this.roster.hashCode();
+        hashCode = hashCode * 37 + this.date.hashCode();
+
+        return hashCode;
     }
 }

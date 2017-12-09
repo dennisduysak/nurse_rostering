@@ -709,4 +709,26 @@ public class Individual {
 
         return out.toString();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Individual)) {
+            return false;
+        }
+
+        Individual that = (Individual) other;
+
+        // Custom equality check here.
+        return this.roster.equals(that.roster) && this.fitness.equals(that.fitness);
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+
+        hashCode = hashCode * 37 + this.roster.hashCode();
+        hashCode = hashCode * 37 + this.fitness.hashCode();
+
+        return hashCode;
+    }
 }
