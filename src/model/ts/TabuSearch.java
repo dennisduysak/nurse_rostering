@@ -4,7 +4,6 @@ import model.Individual;
 import model.construction.RandomConstructionHeuristic;
 import model.sa.operators.Swap;
 import model.schedule.SchedulingPeriod;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,36 +20,43 @@ public class TabuSearch {
         initIndividual = randomConstructionHeuristic.getIndividual(period);
         initIndividual.getFitness(true);
 
-        Individual bestIndividual = Individual.copy(initIndividual);
+        Individual oldIndividual = Individual.copy(initIndividual);
+        Individual bestIndividual = oldIndividual;
         Neighborhood neighborhood = new Neighborhood();
-        List<Individual> tabuList = new ArrayList<>();
+        TabuList tabuList = new TabuList();
 
-        boolean stopCondition = true;
-
-
-        while (stopCondition) {
-            for (int i = 0; i < 1; i++) {
-                List<Individual> neighborList = new ArrayList<>();
-                //schleife ganz viele swaps
-                for (int j = 0; j < 10; j++) {
-                    Swap swap = new Swap();
-                    //TODO define neighborhood; swaps on same day for minimal change?
-                    neighborList.add(swap.mutate(bestIndividual));
-                }
-                neighborhood.addIndividualsToPool(neighborList);
-
-                Individual newBestIndividual = neighborhood.getBestIndividual();
-
-                if (!tabuList.contains(newBestIndividual)) {
-                    bestIndividual = newBestIndividual;
-                    tabuList.add(newBestIndividual);
-                } else {
-                    //keine verbesserung
-                }
+        for (int i = 0; i < 300; i++) {
+            List<Individual> neighborList = new ArrayList<>();
+            //schleife ganz viele swaps
+            System.out.print((i + 1) + ". Iteration \t");
+            for (int j = 0; j < 10; j++) {
+                Swap swap = new Swap();
+                //TODO define neighborhood; swaps on same day for minimal change?
+                neighborList.add(swap.mutate(oldIndividual));
             }
-        }
+            System.out.print("neighbor\t");
 
-        return null;
+            neighborhood.addIndividualsToPool(neighborList);
+
+            Individual newIndividual = neighborhood.getBestIndividual();
+
+            if (!tabuList.contains(newIndividual)) {
+                oldIndividual = newIndividual;
+                tabuList.add(oldIndividual);
+                if (oldIndividual.getFitness() < bestIndividual.getFitness()) {
+                    bestIndividual = oldIndividual;
+                }
+            } else {
+                //TODO define asperiations criterias
+                if (newIndividual.getFitness() < bestIndividual.getFitness()) {
+                    oldIndividual = newIndividual;
+                    bestIndividual = oldIndividual;
+                }
+                //check aspiritations criterias
+            }
+            System.out.println("end");
+        }
+        return bestIndividual;
     }
 
     public Individual getInitIndividual() {
