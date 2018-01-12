@@ -1,4 +1,4 @@
-package model.sa.operators;
+package model.operators;
 
 import helper.RandomHelper;
 import model.Individual;
@@ -18,14 +18,22 @@ public class SwappingNursesMutation {
      * @return selection: the by mutation changed selection
      */
     public Individual mutate(Individual individual) {
+        int numberOfDays = individual.getDayRosters().size();
+        int randDay = RandomHelper.getInstance().getInt(numberOfDays);
+
+        return mutateWithDay(individual, randDay);
+    }
+
+    public Individual mutate(Individual individual, int randDay) {
+        return mutateWithDay(individual, randDay);
+    }
+
+
+    public Individual mutateWithDay(Individual individual, int randDay) {
         Individual mutatedInd = null;
 
         do {
             mutatedInd = Individual.copy(individual);
-
-            // random day in persiod
-            int numberOfDays = mutatedInd.getDayRosters().size();
-            int randDay = RandomHelper.getInstance().getInt(numberOfDays);
 
             //get random employee of random workingday
             List<Map<ShiftType, Employee>> dayRoster = mutatedInd.getDayRosters().get(randDay).getDayRoster();
@@ -58,7 +66,7 @@ public class SwappingNursesMutation {
                 dayRoster.get(randShift).entrySet().iterator().next().setValue(nurse2);
             }
 
-        } while (!mutatedInd.isFeasible());
+        } while (!mutatedInd.isFeasible() && !individual.equals(mutatedInd));
 
         //update fitness
         mutatedInd.getFitness(true);

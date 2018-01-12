@@ -1,21 +1,20 @@
 package model.ts;
 
 import helper.ConfigurationHelper;
-import model.Individual;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class TabuList {
 
-    private Queue<Individual> queue;
+    private Queue<Integer> queue;
     private int queueSize = ConfigurationHelper.getInstance().getPropertyInteger("ts.TabuListSize", 10);
 
     public TabuList() {
         queue = new LinkedList<>();
     }
 
-    public void add(Individual i) {
+    public void add(int i) {
         boolean hasAdded = false;
         while (!hasAdded) {
             if (queue.size() < queueSize) {
@@ -27,7 +26,7 @@ public class TabuList {
         }
     }
 
-    public boolean contains(Individual i) {
+    public boolean contains(int i) {
         return queue.contains(i);
     }
 }

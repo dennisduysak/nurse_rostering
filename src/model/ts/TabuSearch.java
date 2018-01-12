@@ -1,14 +1,31 @@
 package model.ts;
 
+import helper.ConfigurationHelper;
+import helper.RandomHelper;
 import model.Individual;
 import model.construction.RandomConstructionHeuristic;
-import model.sa.operators.Swap;
+import model.operators.SwappingNursesMutation;
 import model.schedule.SchedulingPeriod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TabuSearch {
+    /**
+     * Current iteration.
+     */
+    private int iteration = 0;
+
+    /**
+     * Maximum number of iterations.
+     */
+    private int maxIterations = ConfigurationHelper.getInstance().getPropertyInteger("ts.MaxIterations", 1000);
+
+    /**
+     * Maximum number of iterations.
+     */
+    private int neighbourSize = ConfigurationHelper.getInstance().getPropertyInteger("ts.NeighbourSize", 10);
+
     /**
      * Holds the initializing individual (for benchmarking purposes against last solutions).
      */
@@ -25,38 +42,46 @@ public class TabuSearch {
         Neighborhood neighborhood = new Neighborhood();
         TabuList tabuList = new TabuList();
 
-        for (int i = 0; i < 300; i++) {
+        while (!isTerminationCondition()) {
+            // get random day
+            int numberOfDays = oldIndividual.getDayRosters().size();
+            int randDay = RandomHelper.getInstance().getInt(numberOfDays);
+
+            //get neighbourhood
             List<Individual> neighborList = new ArrayList<>();
-            //schleife ganz viele swaps
-            System.out.print((i + 1) + ". Iteration \t");
-            for (int j = 0; j < 10; j++) {
-                Swap swap = new Swap();
-                //TODO define neighborhood; swaps on same day for minimal change?
-                neighborList.add(swap.mutate(oldIndividual));
+            for (int i = 0; i < neighbourSize; i++) {
+                SwappingNursesMutation swap = new SwappingNursesMutation();
+                neighborList.add(swap.mutate(oldIndividual, randDay));
             }
-            System.out.print("neighbor\t");
-
             neighborhood.addIndividualsToPool(neighborList);
-
+            neighborhood.benchmark();
             Individual newIndividual = neighborhood.getBestIndividual();
 
-            if (!tabuList.contains(newIndividual)) {
+            if (!tabuList.contains(randDay)) {
+                tabuList.add(randDay);
                 oldIndividual = newIndividual;
-                tabuList.add(oldIndividual);
                 if (oldIndividual.getFitness() < bestIndividual.getFitness()) {
                     bestIndividual = oldIndividual;
                 }
             } else {
-                //TODO define asperiations criterias
+                //check aspiritations criterias
                 if (newIndividual.getFitness() < bestIndividual.getFitness()) {
                     oldIndividual = newIndividual;
                     bestIndividual = oldIndividual;
                 }
-                //check aspiritations criterias
             }
-            System.out.println("end");
+            System.out.println(iteration + ". Iteration\t" + oldIndividual.getFitness());
         }
         return bestIndividual;
+    }
+
+    /**
+     * Returns true, if the termination condition is met.
+     *
+     * @return True, if termination condition is met
+     */
+    private boolean isTerminationCondition() {
+        return ++iteration > maxIterations;
     }
 
     public Individual getInitIndividual() {

@@ -3,24 +3,22 @@ package model.ea.operators.selection;
 import helper.ConfigurationHelper;
 import model.ea.Population;
 
-public class GoodBadMatingSelection implements IMatingSelection {
+public class BestIndividualSelection implements IMatingSelection {
 	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
-	
+	 
 	/**
-	 * For the first half of needed parents take the best individuals and for the second half take the worst.
-     * @param population: the initial population of the generation
-     * @return selection: a list of the selected individuals to become parents
-     */
+	 * Takes the population after Recombination and Mutation selects
+	 * the number of needed best individuals from parents and children.
+	 * @param population Population instance
+	 */
 	@Override
 	public Population select(Population population) {
 		population.sortByFitness();
 		int poolSize = population.getPool().size()-1;
 		Population selection = new Population();
-		for (int i = 0; i < numberOfParents/2; i++) {
+		for (int i = 0; i < numberOfParents; i++) {
 			selection.addIndividualToPool(population.getPool().get(i));
-			selection.addIndividualToPool(population.getPool().get(poolSize-i));
 		}
 		return selection;
 	}
-
 }

@@ -1,4 +1,4 @@
-package model.sa.operators;
+package model.ea.operators.mutation;
 
 import helper.RandomHelper;
 import model.Individual;
@@ -9,12 +9,20 @@ import model.schedule.ShiftType;
 import java.util.List;
 import java.util.Map;
 
-public class Swap {
-    public Individual mutate(Individual individual) {
-        Individual mutatedInd = Individual.copy(individual);
+@SuppressWarnings("unusued")
+public class SwappingNursesOldMutation implements IMutation {
+    /**
+     * For every individual of the selection swap the first nurse of shift x on a random day
+     * with the first nurse of shift x on another random day.
+     *
+     * @param selection: either the new created children or, in the case without recombination, mutate the selected parents
+     * @return selection: the by mutation changed selection
+     */
+    @Override
+    public Population mutate(Population selection) {
+        int numberOfDays = selection.getPool().get(0).getDayRosters().size();
 
-        int numberOfDays = mutatedInd.getDayRosters().size();
-
+        for (Individual individual : selection.getPool()) {
             boolean feasible = true;
             do {
                 feasible = true;
@@ -27,8 +35,8 @@ public class Swap {
                 }
                 while (randDay1 == randDay2);
 
-                List<Map<ShiftType, Employee>> dayRoster1 = mutatedInd.getDayRosters().get(randDay1).getDayRoster();
-                List<Map<ShiftType, Employee>> dayRoster2 = mutatedInd.getDayRosters().get(randDay2).getDayRoster();
+                List<Map<ShiftType, Employee>> dayRoster1 = individual.getDayRosters().get(randDay1).getDayRoster();
+                List<Map<ShiftType, Employee>> dayRoster2 = individual.getDayRosters().get(randDay2).getDayRoster();
 
                 // get number of (maximum) shifts
                 int numberOfShifts = dayRoster1.size() <= dayRoster2.size() ? dayRoster1.size() : dayRoster2.size();
@@ -41,21 +49,21 @@ public class Swap {
                 // the nurse of the same shift on another random day
                 Employee nurse2 = dayRoster2.get(randShift).entrySet().iterator().next().getValue();
 
-                ShiftType st = mutatedInd.getDayRosters().get(randDay1).getShiftTypeForEmployee(nurse1);
+                ShiftType st = individual.getDayRosters().get(randDay1).getShiftTypeForEmployee(nurse1);
 
                 // swap the nurses
                 dayRoster1.get(randShift).replace(st, nurse2);
                 dayRoster2.get(randShift).replace(st, nurse1);
 
                 // swap back if solution isn't feasible anymore
-                if (!mutatedInd.isFeasible()) {
+                if (!individual.isFeasible()) {
                     dayRoster1.get(randShift).replace(st, nurse1);
                     dayRoster2.get(randShift).replace(st, nurse2);
                     feasible = false;
                 }
             } while (!feasible);
+        }
 
-        mutatedInd.getFitness(true);
-        return mutatedInd;
+        return selection;
     }
 }

@@ -3,8 +3,7 @@ package model.sa;
 import helper.ConfigurationHelper;
 import model.Individual;
 import model.construction.RandomConstructionHeuristic;
-import model.sa.operators.Swap;
-import model.sa.operators.SwappingNursesMutation;
+import model.operators.SwappingNursesMutation;
 import model.schedule.SchedulingPeriod;
 
 public class SimulatedAnnealing {
@@ -25,7 +24,6 @@ public class SimulatedAnnealing {
         int numberOfIterations = (int) (startingTemperature / coolingRate);
         Individual bestSolution = oldSolution;
         SwappingNursesMutation swapMutation = new SwappingNursesMutation();
-        //Swap swapMutation = new Swap();
 
         for (int i = 0; i < numberOfIterations; i++) {
             double score = oldSolution.getFitness();
