@@ -1,56 +1,61 @@
 package model.ts;
 
-import helper.ConfigurationHelper;
 import helper.RandomHelper;
 import model.Individual;
-import model.construction.RandomConstructionHeuristic;
 import model.operators.SwappingNursesMutation;
-import model.schedule.SchedulingPeriod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TabuSearch {
-    /**
-     * Current iteration.
-     */
-    private int iteration = 0;
 
     /**
      * Maximum number of iterations.
      */
-    private int maxIterations = ConfigurationHelper.getInstance().getPropertyInteger("ts.MaxIterations", 1000);
+    private int maxIterations;
 
     /**
      * Maximum number of iterations.
      */
-    private int neighbourSize = ConfigurationHelper.getInstance().getPropertyInteger("ts.NeighbourSize", 10);
+    private int neighbourSize;
+
+    /**
+     * Maximum number of TabuList.
+     */
+    private int tabuListSize;
 
     /**
      * Holds the initializing individual (for benchmarking purposes against last solutions).
      */
-    private Individual initIndividual = null;
+    private Individual initIndividual;
 
-    public Individual optimize(SchedulingPeriod period) {
+    public TabuSearch(int maxIterations, int neighbourSize, int tabuListSize, Individual initIndividual) {
+        this.maxIterations = maxIterations;
+        this.neighbourSize = neighbourSize;
+        this.tabuListSize = tabuListSize;
+        this.initIndividual = initIndividual;
+    }
+
+    public Individual optimize() {
         //get initialsolution
-        RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
-        initIndividual = randomConstructionHeuristic.getIndividual(period);
-        initIndividual.getFitness(true);
+        //RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
+        //initIndividual = randomConstructionHeuristic.getIndividual(period);
+        //initIndividual.getFitness(true);
 
         Individual oldIndividual = Individual.copy(initIndividual);
         Individual bestIndividual = oldIndividual;
         Neighborhood neighborhood = new Neighborhood();
-        TabuList tabuList = new TabuList();
+        TabuList tabuList = new TabuList(tabuListSize);
 
-        while (!isTerminationCondition()) {
+        for (int i = 0; i < maxIterations; i++) {
             // get random day
             int numberOfDays = oldIndividual.getDayRosters().size();
             int randDay = RandomHelper.getInstance().getInt(numberOfDays);
 
             //get neighbourhood
+            SwappingNursesMutation swap = new SwappingNursesMutation();
             List<Individual> neighborList = new ArrayList<>();
-            for (int i = 0; i < neighbourSize; i++) {
-                SwappingNursesMutation swap = new SwappingNursesMutation();
+            for (int j = 0; j < neighbourSize; j++) {
                 neighborList.add(swap.mutate(oldIndividual, randDay));
             }
             neighborhood.addIndividualsToPool(neighborList);
@@ -70,18 +75,9 @@ public class TabuSearch {
                     bestIndividual = oldIndividual;
                 }
             }
-            System.out.println(iteration + ". Iteration\t" + oldIndividual.getFitness());
+            System.out.println((i+1) + ". von " + maxIterations + " Iteration\t" + oldIndividual.getFitness());
         }
         return bestIndividual;
-    }
-
-    /**
-     * Returns true, if the termination condition is met.
-     *
-     * @return True, if termination condition is met
-     */
-    private boolean isTerminationCondition() {
-        return ++iteration > maxIterations;
     }
 
     public Individual getInitIndividual() {

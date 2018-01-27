@@ -1,7 +1,6 @@
 package model.schedule;
 
 import helper.DateTimeHelper;
-import model.Individual;
 
 import java.util.*;
 
@@ -68,6 +67,14 @@ public class DayRoster {
      */
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    /**
+     * Sets the roster.
+     * @param roster roster instance
+     */
+    public void setRoster(List<Map<ShiftType, Employee>> roster) {
+        this.roster = roster;
     }
 
     /**

@@ -1,17 +1,16 @@
 package model.ts;
 
-import helper.ConfigurationHelper;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class TabuList {
 
     private Queue<Integer> queue;
-    private int queueSize = ConfigurationHelper.getInstance().getPropertyInteger("ts.TabuListSize", 10);
+    private int queueSize;
 
-    public TabuList() {
+    public TabuList(int tabuListSize) {
         queue = new LinkedList<>();
+        queueSize = tabuListSize;
     }
 
     public void add(int i) {

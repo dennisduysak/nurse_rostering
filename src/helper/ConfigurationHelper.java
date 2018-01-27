@@ -2,6 +2,7 @@ package helper;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -162,5 +163,65 @@ public class ConfigurationHelper {
      */
     public void setProperty(String key, String value) {
         configuration.setProperty(key, value);
+    }
+
+    /**
+     * Returns an array of int.
+     * @param key Configuration key
+     * @param separator Separator
+     * @return Array of int
+     */
+    public int[] getPropertyIntArray(String key, String separator) {
+        String values = getProperty(key);
+        return Arrays.stream(values.split(separator)).mapToInt(Integer::parseInt).toArray();
+    }
+
+    /**
+     * Returns an array of int.
+     * @param key Configuration key
+     * @return Array of int
+     */
+    public int[] getPropertyIntArray(String key) {
+        return getPropertyIntArray(key, "\\,");
+    }
+
+    /**
+     * Returns an array of double.
+     * @param key Configuration key
+     * @param separator Separator
+     * @return Array of double
+     */
+    public double[] getPropertyDoubleArray(String key, String separator) {
+        String values = getProperty(key);
+        return Arrays.stream(values.split(separator)).mapToDouble(Double::parseDouble).toArray();
+    }
+
+    /**
+     * Returns an array of double.
+     * @param key Configuration key
+     * @return Array of double
+     */
+    public double[] getPropertyDoubleArray(String key) {
+        return getPropertyDoubleArray(key, "\\,");
+    }
+    /**
+     * Returns an array of double.
+     * @param key Configuration key
+     * @param separator Separator
+     * @return Array of double
+     */
+
+    public Boolean[] getPropertyBooleanArray(String key, String separator) {
+        String values = getProperty(key);
+        return Arrays.stream(values.split(separator)).map(Boolean::parseBoolean).toArray(Boolean[]::new);
+    }
+
+    /**
+     * Returns an array of double.
+     * @param key Configuration key
+     * @return Array of double
+     */
+    public Boolean[] getPropertyBooleanArray(String key) {
+        return getPropertyBooleanArray(key, "\\,");
     }
 }

@@ -8,7 +8,7 @@ import model.schedule.ShiftType;
 import java.util.List;
 import java.util.Map;
 
-public class SwappingNursesMutation {
+public class SwappingNursesMutation implements IOperator {
 
     /**
      * For every individual of the selection swap the first nurse of shift x on a random day
@@ -66,10 +66,10 @@ public class SwappingNursesMutation {
                 dayRoster.get(randShift).entrySet().iterator().next().setValue(nurse2);
             }
 
-        } while (!mutatedInd.isFeasible() && !individual.equals(mutatedInd));
+        } while (!mutatedInd.isFeasible());// || !individual.equals(mutatedInd));
 
         //update fitness
-        mutatedInd.getFitness(true);
+        //mutatedInd.getFitness(true);
 
         return mutatedInd;
     }

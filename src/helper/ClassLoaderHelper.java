@@ -5,6 +5,7 @@ import model.ea.operators.enviromentSelection.IEnvironmentSelection;
 import model.ea.operators.mutation.IMutation;
 import model.ea.operators.recombination.IRecombination;
 import model.ea.operators.selection.IMatingSelection;
+import model.operators.IOperator;
 
 /**
  * Helper methods for loading correct classes.
@@ -111,5 +112,18 @@ public class ClassLoaderHelper {
         }
 
         return (IEnvironmentSelection) instance;
+    }
+
+    /**
+     * Returns the implementing mating selection operator.
+     * @return Instance that implements IConstructionHeuristic
+     */
+    public IOperator getSwappingOperator() {
+        Object instance = getLoadedClass("sa.Operator", "SwappingNursesMutation", "model.operators.");
+        if (instance == null) {
+            return null;
+        }
+
+        return (IOperator) instance;
     }
 }
