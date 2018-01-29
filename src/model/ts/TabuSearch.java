@@ -37,17 +37,17 @@ public class TabuSearch {
     }
 
     public Individual optimize() {
-        //get initialsolution
-        //RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
-        //initIndividual = randomConstructionHeuristic.getIndividual(period);
-        //initIndividual.getFitness(true);
+        return optimize(0, initIndividual);
+    }
 
-        Individual oldIndividual = Individual.copy(initIndividual);
+    private Individual optimize(int i, Individual individual) {
+        Individual oldIndividual = Individual.copy(individual);
         Individual bestIndividual = oldIndividual;
         Neighborhood neighborhood = new Neighborhood();
         TabuList tabuList = new TabuList(tabuListSize);
 
-        for (int i = 0; i < maxIterations; i++) {
+        int to = i + 10;
+        for (i = i; i < to; i++) {
             // get random day
             int numberOfDays = oldIndividual.getDayRosters().size();
             int randDay = RandomHelper.getInstance().getInt(numberOfDays);
@@ -75,7 +75,12 @@ public class TabuSearch {
                     bestIndividual = oldIndividual;
                 }
             }
-            System.out.println((i+1) + ". von " + maxIterations + " Iteration\t" + oldIndividual.getFitness());
+            System.out.println((i + 1) + ". von " + maxIterations + " Iteration\t" + oldIndividual.getFitness());
+
+        }
+        System.gc();
+        if (i < maxIterations) {
+            bestIndividual = optimize(i, bestIndividual);
         }
         return bestIndividual;
     }

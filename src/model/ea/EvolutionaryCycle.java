@@ -18,47 +18,59 @@ public class EvolutionaryCycle {
     /**
      * Current iteration.
      */
-    private int iteration = 0;
+    private int iteration;
 
     /**
      * Maximum number of iterations.
      */
-    private int maxIterations = ConfigurationHelper.getInstance().getPropertyInteger("ea.MaxIterations", 1000);
+    private int maxIterations;
 
     /**
      * The recombination operator is used, if true.
      */
-    private boolean useRecombination = ConfigurationHelper.getInstance().getPropertyBoolean("ea.UseRecombination");
+    private boolean useRecombination;
 
     /**
      * The mutation operator is used, if true.
      */
-    private boolean useMutation = ConfigurationHelper.getInstance().getPropertyBoolean("ea.UseMutation");
+    private boolean useMutation;
 
     /**
      * Holds the mating selection operator instance.
      */
-    private IMatingSelection matingSelectionOperator = ClassLoaderHelper.getInstance().getMatingSelectionOperator();
+    private IMatingSelection matingSelectionOperator;
 
     /**
      * Holds the recombination operator instance.
      */
-    private IRecombination recombinationOperator = ClassLoaderHelper.getInstance().getRecombinationOperator();
+    private IRecombination recombinationOperator;
 
     /**
      * Holds the mutation operator instance.
      */
-    private IMutation mutationOperator = ClassLoaderHelper.getInstance().getMutationOperator();
+    private IMutation mutationOperator;
 
     /**
      * Holds the environment selection operator instance.
      */
-    private IEnvironmentSelection environmentSelectionOperator = ClassLoaderHelper.getInstance().getEnvironmentSelectionOperator();
+    private IEnvironmentSelection environmentSelectionOperator;
 
     /**
      * Holds the initializing population (for benchmarking purposes against last solutions).
      */
-    private Population initPopulation = null;
+    private Population initPopulation;
+
+    public EvolutionaryCycle() {
+        this.iteration = 0;
+        this.maxIterations = ConfigurationHelper.getInstance().getPropertyInteger("ea.MaxIterations");
+        this.useRecombination  = ConfigurationHelper.getInstance().getPropertyBoolean("ea.UseRecombination");
+        this.useMutation = ConfigurationHelper.getInstance().getPropertyBoolean("ea.UseMutation");
+        this.matingSelectionOperator = ClassLoaderHelper.getInstance().getMatingSelectionOperator();
+        this.recombinationOperator = ClassLoaderHelper.getInstance().getRecombinationOperator();
+        this.mutationOperator = ClassLoaderHelper.getInstance().getMutationOperator();
+        this.environmentSelectionOperator = ClassLoaderHelper.getInstance().getEnvironmentSelectionOperator();
+        this.initPopulation = null;
+    }
 
     /**
      * Returns the initializing population.
@@ -124,7 +136,8 @@ public class EvolutionaryCycle {
      * @return True, if termination condition is met
      */
     private boolean isTerminationCondition() {
-        return ++iteration > maxIterations;
+        System.out.println(++iteration + ". Iteration");
+        return iteration > maxIterations;
     }
 
     /**
@@ -135,7 +148,7 @@ public class EvolutionaryCycle {
     private Population generateInitializationPopulation(SchedulingPeriod period) {
         Population population = new Population();
 
-        int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
+        int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation");
         for (int i = 0; i < individualsPerPopulation; i++) {
             RandomConstructionHeuristic randomConstructionHeuristic = new RandomConstructionHeuristic();
             Individual individual = randomConstructionHeuristic.getIndividual(period);

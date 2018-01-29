@@ -1,17 +1,17 @@
 package model.ea.operators.enviromentSelection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import helper.ConfigurationHelper;
 import model.Individual;
 import model.ea.Population;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public class TournamentEnvironmentSelection implements IEnvironmentSelection {
-    private int numberOfDirectDuels = ConfigurationHelper.getInstance().getPropertyInteger("NumberOfDirectDuels", 3);
-    private int numberOfSelections = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
+    private int numberOfDirectDuels = 3;//ConfigurationHelper.getInstance().getPropertyInteger("NumberOfDirectDuels", 3);
+    private int numberOfSelections = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation");
 
     /**
      * @param currentPopulation: the population after mutation and recombination

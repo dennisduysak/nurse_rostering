@@ -94,15 +94,9 @@ public class ConfigurationHelper {
     /**
      * Returns a configuration property as integer.
      * @param key Configuration key.
-     * @param fallback Fallback value.
      * @return Configuration property for key with fallback.
      */
-    public int getPropertyInteger(String key, int fallback) {
-        String intNumber = configuration.getProperty(key);
-        if (intNumber == null || intNumber.trim().equals("")) {
-            return fallback;
-        }
-
+    public int getPropertyInteger(String key) {
         return Integer.valueOf(configuration.getProperty(key));
     }
 

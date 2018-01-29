@@ -15,8 +15,8 @@ public class TwoPointCrossover implements IRecombination {
 
         int numberOfDays = parents.getPool().get(0).getDayRosters().size();
         int half = numberOfDays/2;
-        int interface1 = (int) (half * 0.8);
-        int interface2 = (int) (half * 1.2);
+        int interface1 = (int) (half * 0.7);
+        int interface2 = (int) (half * 1.3);
 
         for (int j = 0; j < parents.getPool().size()/2; j++) {
             Individual parent1 = parents.getPool().get(j);
@@ -26,15 +26,16 @@ public class TwoPointCrossover implements IRecombination {
             for (int i = interface1; i < interface2; i++) {
                 child1.getDayRosters().set(i, parent2.getDayRosters().get(i));
             }
+            child1.getFitness(true);
             children.addIndividualToPool(child1);
 
             Individual child2 = Individual.copy(parent2);
             for (int i = interface1; i < interface2; i++) {
-                child1.getDayRosters().set(i, parent1.getDayRosters().get(i));
+                child2.getDayRosters().set(i, parent1.getDayRosters().get(i));
             }
+            child2.getFitness(true);
             children.addIndividualToPool(child2);
         }
-
         return children;
     }
 }

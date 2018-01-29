@@ -40,7 +40,7 @@ public class ClassLoaderHelper {
         try {
             // try to instantiate the appropriate object
             Class loadingClass = Class.forName(packagePrefix + ConfigurationHelper.getInstance().
-                    getProperty(configurationKey, configurationFallback));
+                    getProperty(configurationKey));//, configurationFallback));
             return loadingClass.newInstance();
         } catch (Throwable e) {
             e.printStackTrace();

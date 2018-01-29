@@ -21,22 +21,25 @@ public class SwappingNursesMutation implements IMutation {
     @Override
     public Population mutate(Population selection) {
 
-        for (Individual individual : selection.getPool()) {
+        //for (Individual individual : selection.getPool()) {
+        for (int i = 0; i < selection.getPool().size(); i++) {
 
+            Individual mutatedInd;
             do {
+                mutatedInd = Individual.copy(selection.getPool().get(i));
                 //get random employee of random workingday
-                int numberOfDays = individual.getDayRosters().size();
+                int numberOfDays = mutatedInd.getDayRosters().size();
                 int randDay = RandomHelper.getInstance().getInt(numberOfDays);
-                List<Map<ShiftType, Employee>> dayRoster = individual.getDayRosters().get(randDay).getDayRoster();
+                List<Map<ShiftType, Employee>> dayRoster = mutatedInd.getDayRosters().get(randDay).getDayRoster();
                 int randShift = RandomHelper.getInstance().getInt(dayRoster.size());
                 Map<ShiftType, Employee> nurse1map = dayRoster.get(randShift);
                 Employee nurse1 = nurse1map.entrySet().iterator().next().getValue();
 
                 //get second random employee from scheduleperiod
-                Employee nurse2 = individual.getPeriod().getRandomEmployee();
+                Employee nurse2 = mutatedInd.getPeriod().getRandomEmployee();
 
                 while (nurse1.getId() == nurse2.getId()) {
-                    nurse2 = individual.getPeriod().getRandomEmployee();
+                    nurse2 = mutatedInd.getPeriod().getRandomEmployee();
                 }
 
                 //work nurse2 on random day?
@@ -57,10 +60,11 @@ public class SwappingNursesMutation implements IMutation {
                     dayRoster.get(randShift).entrySet().iterator().next().setValue(nurse2);
                 }
 
-            } while (!individual.isFeasible());
-
+            } while (!mutatedInd.isFeasible());
             //update fitness
-            individual.getFitness(true);
+            mutatedInd.getFitness(true);
+            selection.getPool().set(i, mutatedInd);
+
         }
 
         return selection;

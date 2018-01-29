@@ -1,13 +1,13 @@
 package model.ea.operators.selection;
 
-import java.util.Random;
-
 import helper.ConfigurationHelper;
 import model.ea.Population;
 
+import java.util.Random;
+
 @SuppressWarnings("unused")
 public class RouletteWheelMatingSelection implements IMatingSelection {
-	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
+	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents");
 
 	@Override
 	public Population select(Population population) {

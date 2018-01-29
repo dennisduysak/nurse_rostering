@@ -3,8 +3,6 @@ package model.ea.operators.enviromentSelection;
 import helper.ConfigurationHelper;
 import model.ea.Population;
 
-import java.util.Map;
-
 /**
  * Implements a simple environmental selection operator.
  */
@@ -12,7 +10,7 @@ public class SimpleEnvironmentSelection implements IEnvironmentSelection {
     /**
      * Number of individuals per population.
      */
-    private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
+    private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation");
 
     /**
      * Selects the fittest individuals from a population.

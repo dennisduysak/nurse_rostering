@@ -4,7 +4,7 @@ import helper.ConfigurationHelper;
 import model.ea.Population;
 
 public class GoodBadMatingSelection implements IMatingSelection {
-	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
+	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents");
 	
 	/**
 	 * For the first half of needed parents take the best individuals and for the second half take the worst.

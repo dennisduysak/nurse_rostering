@@ -6,6 +6,10 @@ import model.ea.EvolutionaryCycle;
 import model.ea.Population;
 import model.schedule.SchedulingPeriod;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 /**
  * StartEvolutionaryAlgorithm class to initialize the application.
  */
@@ -17,6 +21,7 @@ public class StartEvolutionaryAlgorithm extends Basis {
 
     /**
      * Returns the singleton instance.
+     *
      * @return Singleton instance
      */
     public static StartEvolutionaryAlgorithm getInstance() {
@@ -26,50 +31,117 @@ public class StartEvolutionaryAlgorithm extends Basis {
     /**
      * Private constructor to avoid bypassing singleton.
      */
-    private StartEvolutionaryAlgorithm() {}
+    private StartEvolutionaryAlgorithm() {
+    }
 
     /**
      * Default main method.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        PrintWriter writer = getPrintWriter();
+        writer.println("Dateiname;" +
+                "Populationsgröße;" +
+                "Eltern;" +
+                "Rekombination;" +
+                "Mutation;" +
+                "PaarungsSelektionsop.;" +
+                "Mutationsop.;" +
+                "Rekombinationsop.;" +
+                "PopulationsSelektionsop.;" +
+                "Iteration;" +
+                "InitScore;" +
+                "BestScore;" +
+                "Differenz;" +
+                "Laufzeit (ms)");
         // read scheduling period information
-        String fileName = ConfigurationHelper.getInstance().getProperty("file");
-        SchedulingPeriod period = getInstance().parseSchedulingPeriod(fileName);
+        String[] fileName = ConfigurationHelper.getInstance().getPropertyArray("file");
 
-        // create and run the evolutionary cycle
-        EvolutionaryCycle evolutionaryCycle = new EvolutionaryCycle();
-        Population evolutionizedPopulation = evolutionaryCycle.evolutionize(period);
+        int lenght = ConfigurationHelper.getInstance().getPropertyArray("ea.UseMutationArray").length;
 
-        // retrieve best individual from initialized and evolutionized populations
-        Individual bestInitialized = evolutionaryCycle.getInitPopulation().getBestIndividual();
-        Individual best = evolutionizedPopulation.getBestIndividual();
+        for (String file : fileName) {
+            for (int i = 0; i < lenght; i++) {
+                setParameters(i);
+                ConfigurationHelper.getInstance().setProperty("ea.NumberOfParents", "4");
 
-        System.out.println("InitScore: " + bestInitialized.getFitness());
-        System.out.println("BestScore: " + best.getFitness());
-        System.out.println("Difference: " + (bestInitialized.getFitness() - best.getFitness()));
+                SchedulingPeriod period = getInstance().parseSchedulingPeriod(file);
+                // create and run the evolutionary cycle
+                long timeStart = System.currentTimeMillis();
+                EvolutionaryCycle evolutionaryCycle = new EvolutionaryCycle();
+                Population evolutionizedPopulation = evolutionaryCycle.evolutionize(period);
 
- /*       TuiHelper.getInstance().showEAResult(best, bestInitialized);
-        System.out.println(StartEvolutionaryAlgorithm.getInstance().writeSolutionFile(best));*/
+                // retrieve best individual from initialized and evolutionized populations
+                Individual bestInitialized = evolutionaryCycle.getInitPopulation().getBestIndividual();
+                Individual best = evolutionizedPopulation.getBestIndividual();
+                long timeEnd = System.currentTimeMillis();
+
+
+                String output = file + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.IndividualsPerPopulation") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.NumberOfParents") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.UseRecombination") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.UseMutation") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.MatingSelectionOperator") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.MutationOperator") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.RecombinationOperator") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.EnvironmentSelectionOperator") + ";" +
+                        ConfigurationHelper.getInstance().getProperty("ea.MaxIterations") + ";" +
+                        bestInitialized.getFitness() + ";" +
+                        best.getFitness() + ";" +
+                        (bestInitialized.getFitness() - best.getFitness()) + ";" +
+                        (timeEnd - timeStart);
+                writer.println(output);
+            }
+        }
+        writer.close();
     }
 
-    /**
-     * Writes a solution file.
-     * @param individual Individual instance
-     * @return Full path of written file
-     */
- //   private String writeSolutionFile(Individual individual) {
-   /*     // check, if we need to write a solution file
-        if (!ConfigurationHelper.getInstance().getPropertyBoolean("SolutionWrite")) {
-            return "\"SolutionWrite\" in config.properties is set to \"false\", no solution file written.";
+    private static void setParameters(int i) throws Exception {
+        String[] individualsPerPopulationArray = ConfigurationHelper.getInstance().getPropertyArray("ea.IndividualsPerPopulationArray");
+        String[] numberOfParentsArray = ConfigurationHelper.getInstance().getPropertyArray("ea.NumberOfParentsArray");
+        String[] useRecombinationArray = ConfigurationHelper.getInstance().getPropertyArray("ea.UseRecombinationArray");
+        String[] useMutationArray = ConfigurationHelper.getInstance().getPropertyArray("ea.UseMutationArray");
+        String[] matingSelectionOperatorArray = ConfigurationHelper.getInstance().getPropertyArray("ea.MatingSelectionOperatorArray");
+        String[] mutationOperatorArray = ConfigurationHelper.getInstance().getPropertyArray("ea.MutationOperatorArray");
+        String[] recombinationOperatorArray = ConfigurationHelper.getInstance().getPropertyArray("ea.RecombinationOperatorArray");
+        String[] environmentSelectionOperatorArray = ConfigurationHelper.getInstance().getPropertyArray("ea.EnvironmentSelectionOperatorArray");
+        String[] maxIterationsArray = ConfigurationHelper.getInstance().getPropertyArray("ea.MaxIterationsArray");
+
+        if ((individualsPerPopulationArray.length != numberOfParentsArray.length) &&
+                (numberOfParentsArray.length != useRecombinationArray.length) &&
+                (useRecombinationArray.length != useMutationArray.length) &&
+                (useMutationArray.length != matingSelectionOperatorArray.length) &&
+                (matingSelectionOperatorArray.length != mutationOperatorArray.length) &&
+                (mutationOperatorArray.length != recombinationOperatorArray.length) &&
+                (recombinationOperatorArray.length != environmentSelectionOperatorArray.length) &&
+                (environmentSelectionOperatorArray.length != maxIterationsArray.length)) {
+            throw new Exception("Field has not the same lenght");
         }
 
-        IWriter writer = ClassLoaderHelper.getInstance().getWriter();
+
+        ConfigurationHelper.getInstance().setProperty("ea.IndividualsPerPopulation", individualsPerPopulationArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.NumberOfParents", numberOfParentsArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.UseRecombination", useRecombinationArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.UseMutation", useMutationArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.MatingSelectionOperator", matingSelectionOperatorArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.MutationOperator", mutationOperatorArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.RecombinationOperator", recombinationOperatorArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.EnvironmentSelectionOperator", environmentSelectionOperatorArray[i]);
+        ConfigurationHelper.getInstance().setProperty("ea.MaxIterations", maxIterationsArray[i]);
+
+
+    }
+
+    private static PrintWriter getPrintWriter() {
+        String fileName = ConfigurationHelper.getInstance().getProperty("fileName");
+        String alg = "ea";
+        PrintWriter writer = null;
         try {
-            return "Solution file written to: " + writer.writeFile(individual);
-        } catch (Exception e) {
-            return "Error writing solution file: " + e.getMessage();
+            writer = new PrintWriter("./output/" + alg + "/" + fileName + ".csv", "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-    }*/
+        return writer;
+    }
 
 
 }

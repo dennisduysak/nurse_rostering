@@ -1,16 +1,14 @@
 package model.ea.operators.enviromentSelection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import helper.ConfigurationHelper;
 import model.Individual;
 import model.ea.Population;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommaEnvironmentSelection implements IEnvironmentSelection {
-	 private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation", 10);
+	 private int individualsPerPopulation = ConfigurationHelper.getInstance().getPropertyInteger("ea.IndividualsPerPopulation");
 	 
 	 /** 
 	  *@param population - takes the population after Recombination and Mutation

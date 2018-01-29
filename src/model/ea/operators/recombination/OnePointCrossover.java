@@ -24,15 +24,16 @@ public class OnePointCrossover implements IRecombination {
 			for (int i = half; i < numberOfDays; i++) {
 				child1.getDayRosters().set(i, parent2.getDayRosters().get(i));
 			}
+			child1.getFitness(true);
 			children.addIndividualToPool(child1);
 
 			Individual child2 = Individual.copy(parent2);
 			for (int i = half; i < numberOfDays; i++) {
-				child1.getDayRosters().set(i, parent1.getDayRosters().get(i));
+				child2.getDayRosters().set(i, parent1.getDayRosters().get(i));
 			}
+			child2.getFitness(true);
 			children.addIndividualToPool(child2);
 		}
-
 		return children;
 	}
 }

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentMatingSelection implements IMatingSelection {
-	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents", 6);
-	private int numberOfDirectDuels = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfDirectDuels", 3);
+	private int numberOfParents = ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfParents");
+	private int numberOfDirectDuels = 3;//ConfigurationHelper.getInstance().getPropertyInteger("ea.NumberOfDirectDuels", 3);
 	
 	/**
      * @param population: the initial population of the generation

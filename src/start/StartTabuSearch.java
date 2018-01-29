@@ -78,6 +78,7 @@ public class StartTabuSearch extends Basis {
                         (timeEnd - timeStart));
             }
         }
+        writer.close();
     }
 
     private static PrintWriter getPrintWriter() {
